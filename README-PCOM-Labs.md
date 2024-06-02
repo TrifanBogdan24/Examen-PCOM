@@ -221,6 +221,7 @@ xiii
   * `SS` = Slow Start
   * `MD` = Multiplicative Decrease
 
+- `ARQ` = Automatic Repeat Request
 - `FTP` = File Transfer Protocol
 - `DNS` = Domain Name System
   * `RR` = Resource Records
@@ -1430,6 +1431,9 @@ Presupunem ca nu exista pierderi pe link-urile dintr host si receiver.
 
 ![UDP Stop-and-Wait](https://pcom.pages.upb.ro/labs/lab5/images/stop_and_wait.png)
 
+> Protocolul `Stop-and-wait` este suficient sa fie un canal `half-duplex`
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
+
 
 Transmitatorul, trimite o datagrama `UDP`, asteapta confirmarea de la recepter,
 iar apoi trimite urmatoarea datagrama `UDP`.
@@ -1449,20 +1453,25 @@ deoarce o datagraa `UDP` poate avea cel mult 65507 bytes (atunci cand folosim IP
 
 
 
-### `Frereastra Glisanta` peste `UDP`
+### `Frereastra Glisanta` peste `UDP` (cred: `Selective Repeat ARQ`)
 Pentru a folosi. un link intr-un mod optim, vom folosi tehnica de `fereastra glisanta` (sliding window).
 
 
-> Vom trimite `window_size` datagrame fara sa astepam dupa un `ACK`, apoi,
-
-> pentru fecare `ACK` primit, vom face slide ferestrei la dreapta.
-
+Vom trimite `window_size` datagrame fara sa astepam dupa un `ACK`, apoi,
+pentru fecare `ACK` primit, vom face slide ferestrei la dreapta.
 
 
+> `ARQ` = Automatic Repeat Request
 
-### Dimensiunea ferestrei glisante
+> `Selective Repeat ARQ` foloseste un canal `half-duplex` sau `duplex`
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
+
+
+
+### Dimensiunea ferestrei glisante (cred: `Selective Repeat ARQ`)
 Vom presupune un caz simplu in care 2 gazde pot comunica datagrame `UDP`
 peste mai multe link-uri:
+
 
 ```
           L1                L2               L3
@@ -1493,6 +1502,39 @@ windows_size = [BDP / DatagramSize] = [50000 / 1500] = 30
 
 
 
+### Determinarea vitezei de transmisie `bandwidth` pt protocolul `Selective Repeat ARQ`
+
+```
+BW = ? pt `Selective Repeat ARQ`
+
+RTT = Round-Trip Time (durata efectuata de la trimiterea unui pachet si primirea unui ACK = Acknowledge) 
+MSS = Maximum Segment Size
+CWND = Congestion Window (numarul de pachete trimise simultan)
+P = procentajul de pachete pierdute
+BW = bandwidth = viteza de transmisie = ?
+```
+```
+BW = (CWND * MSS) / (RTT * P)
+```
+
+
+
+> `BW` = ? pt `Selective Repeat ARQ`
+> 
+> Pentru:
+> 
+> `RTT` = 5
+> 
+> `MSS` = 1000 bytes
+> 
+> `RTT` = 1ms
+> 
+> `P` = 20% pachete pierdute
+> 
+> `BW` = (5 * 1000) / (1 * 0.2) = 25 Mbytes/s
+
+
+
 
 ## Lab 6. Retransmisie peste `UDP`. `Go-Back-N ARQ`
 > Link: https://pcom.pages.upb.ro/labs/lab6/go_back_n.html
@@ -1518,7 +1560,7 @@ Transmitatorul retransmite toate cele **N** segmentele din fereastra la declansa
 
 
 
-> Protocolul `Go-Back-N ARQ` este un protocol de tip `duplex`
+> Protocolul `Go-Back-N ARQ` foloseste un canal `duplex`.
 ![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
 
 
@@ -2268,7 +2310,27 @@ TODO: continua
 
 
 
-# Ohers
+# Others
+
+
+## `Disanta Hamming` (Detetcita si corectarea erorilor)
+Distanta Hamming `d(u, v)` dintre doua cuvinte u si v reprezinta numaru de simboluri diferite intre cele doua (echivalent cu numarul minim de erori de bit 1 de care ar fi nevoie pt a transforma unul din cuvinte in celalalt).
+
+> **Pondearea Hamming** = `w` = nr de unitati 1 continute de cuvant
+
+
+```c
+d_uv = 0;
+
+for (int i = 0; i < len; i++)
+  if (u[i] != v[i])
+    d_uv++;
+```
+
+
+Pentru a **detecta** cel mult **k** erori: `d(u, v) >= k + 1`, oricare u, v din Sn
+Pentru a **corecta** cel mult **k** erori: `d(u, v) >= 2 * k + 1`. oircare u, vi din Sn
+
 
 ## `RIP` (Routing Information Protocol)
 > Link: https://youtu.be/8jKNrWgFtUA
@@ -2322,3 +2384,7 @@ Cum își actualizează `RIP` **tabelul de rutare**?
 - este ușor de configurat
 - nu există complexitate
 - Utilizare redusă a CPU-ului
+
+
+## `NAT` (Network Address Translater)
+

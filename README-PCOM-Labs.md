@@ -201,12 +201,14 @@ xiii
 - `AS` = Autonomous Systems
 - `OSPF` = Open Shortes Path First
 
+- `UDP` = User Datagram Protocol
 - `TCP` = Transmission Control Protocol
   * `SYN` = Synchronize
   * `RST` = Reset
   * `FIN` = Finish
   * `ACK` = Acknowledge
   * `NACK` = Not Acknowledge
+  * `RR` = Receive Ready
   * `RTT` = Round Trip Time
   * `MSS` = Maximum Segment Size
   * `RTO` = Retransmission Timeout
@@ -219,7 +221,6 @@ xiii
   * `SS` = Slow Start
   * `MD` = Multiplicative Decrease
 
-- `UDP` = User Datagram Protocol
 - `FTP` = File Transfer Protocol
 - `DNS` = Domain Name System
   * `RR` = Resource Records

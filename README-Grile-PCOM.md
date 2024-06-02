@@ -9,6 +9,9 @@
 Sursa este responsabilă să descopere MTU-ul potrivit
 și să fragmenteze pachetele corespunzător.
 
+`IPv6` a fost proiectat astfel incat sa evite fragmentarile,
+deoarece majoritatea retelelor accepta pachete de dimensiuni mari -> `MTU mare`.
+
 
 ## Cand se `fragmenteaza` pachetele `IPv4`?
 * `Cand se trece intr-o retea cu MTU mai mic decat dimensiunea pachetului`

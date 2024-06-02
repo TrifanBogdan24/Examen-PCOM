@@ -2332,6 +2332,32 @@ Pentru a **detecta** cel mult **k** erori: `d(u, v) >= k + 1`, oricare u, v din 
 Pentru a **corecta** cel mult **k** erori: `d(u, v) >= 2 * k + 1`. oircare u, vi din Sn
 
 
+
+## `NAT` (Network Address Translation)
+O adresa este asignata pentru mai multe calculatoare.
+Foloseste adrese locale (private sau non-rutabile).
+
+`NAT` `translateaza` intre adresa privata si adresa globala
+(permite dispozitivelor dintr-o retea locala sa comunice cu retele externe,
+de ex.: internetul)
+
+Principiul `NAT`:
+- adresa `IP`
+- numar **port** transmitator
+- tabela de translatare
+
+Transmisie:
+- **inlocuieste** adresa `IP locala` cu adresa `IP globala`
+- memoreaza in tabela de translatate corespundenta si numarul portului
+- inlocuieste numarul portului cun index in tabela de trasnlatare, recompune sumele de control `IP` si `TCP`
+
+Receptie:
+- obtine numarul portului din pachet (index in tabela de translatare)
+- extrage adresa `IP locala` si nr port
+- inlocuieste adresa IP si numarul portului din pachet
+- recalculeaza sumele de control `IP` si `TCP`
+
+
 ## `RIP` (Routing Information Protocol)
 > Link: https://youtu.be/8jKNrWgFtUA
 

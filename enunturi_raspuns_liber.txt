@@ -1,0 +1,2 @@
+Certificate, POP3, NAT, Byte/Character Stuffing, DNS, MTU și traceroute prin icmp. FTP. Diffie Hellman. La transport ceva cu video streaming. ICMP. SMTP. RIP. Securitare. IP. Sa explici care ar fi un tip de atac la care e vulnerabil.
+

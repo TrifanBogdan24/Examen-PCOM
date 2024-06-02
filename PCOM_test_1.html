@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+    html * {
+    font-size: 0.97em !important;
+    }
+
+    .quizDiv {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        text-align: center;
+        width: 97%;
+        margin: auto;
+
+    }
+
+    .btn {
+        padding: 9px;
+    }
+
+    .btn-light {
+        background-color: #EFEFEF;
+        color:black;
+        outline: none !important;
+        border: 0px;
+    }
+
+    .btn,
+    .btn-block {
+        padding-left: 4.8%;
+        padding-right: 4.8%;
+        margin: auto;
+        white-space: normal;
+    }
+
+
+
+    div {
+        padding-bottom: 8px;
+        padding-top: 8px;
+    }
+    .question {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-bottom: 0px;
+    }
+
+    .quizDiv {
+        margin-bottom: 20px;
+    }
+    .feedback {
+        font-weight: bold;
+        font-size: 1.7em;
+        display:none;
+    }
+    .makeOpaque {
+        opacity: 0.60;
+    }
+    .btn-success, .btn-success:focus {
+        background: linear-gradient(
+        to right, 
+        #198754 0%, 
+        #198754 5%, 
+        #EFF4EF 5%, 
+        #EFF4EF  95%,
+        #198754 95%,
+        #198754 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+    .btn-secondary, .btn-secondary:focus {
+        background: linear-gradient(
+        to right, 
+        #adb5bd 0%, 
+        #adb5bd 5%, 
+        #EFEFEF 5%, 
+        #EFEFEF  95%,
+        #adb5bd 95%,
+        #adb5bd 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+    .btn-danger, .btn-danger:focus {
+        background: linear-gradient(
+        to right, 
+        #dc3545 0%, 
+        #dc3545 5%, 
+        #F4EFEF 5%, 
+        #F4EFEF  95%,
+        #dc3545 95%,
+        #dc3545 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+
+    .btn-warning, .btn-warning:focus {
+        background: linear-gradient(
+        to right, 
+        #ffc107 0%, 
+        #ffc107 5%, 
+        #EFEFEA 5%, 
+        #EFEFEA  95%,
+        #ffc107 95%,
+        #ffc107 100%
+    );
+        color:black;
+        outline: none !important;
+        border: 0px;
+    }
+
+
+    .btn:focus,.btn:active:focus,.btn.active:focus,
+    .btn.focus,.btn:active.focus,.btn.active.focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    img {
+        max-width: 100%;
+        display:block;
+        margin: auto;
+    } 
+
+    button:not(.filterButton) {
+        width: 98%;
+    }
+
+    .filterButton {
+        border-radius: 10px;
+        margin-top: 1px;
+    }
+    .filterDiv {
+        max-width:97.5%;
+        margin: auto;
+        margin-top: 1px;
+    }
+    .pointerNone {
+        pointer-events: none;
+    }
+    .explanation {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-bottom: 0px;
+    }
+    .btn-white {
+        background-color: white;
+    }
+    </style>
+</head>
+<body>
+
+
+
+
+    <script>
+        document.body.onload = addElement;
+        function addElement() {
+var RIGHTS={
+  "1": {
+    "question": "Cum se transmite o cerere ARP?",
+    "rights": ["Prin broadcast in reteaua locala"],
+    "wrongs": [
+      "Direct spre destinatia cu adresa IP cunoscuta",
+      "Direct spre destinatia cu adresa MAC cunoscuta"
+    ],
+    "feedback": "Cererea ARP este trimisă prin broadcast în rețeaua locală, astfel încât toate dispozitivele din rețea să o primească și să poată actualiza tabelele lor ARP cu adresa MAC corespunzătoare pentru adresa IP specificată în cerere."
+  },
+  "2": {
+    "question": "Ce tip de canal poate fi folosit pentru un protocol Stop and wait?",
+    "rights": ["Half duplex sau full duplex"],
+    "wrongs": [
+      "Orice fel de canal de comunicatie",
+      "Simplex",
+      "Simplex sau half duplex",
+      "Doar full duplex"
+    ],
+    "feedback": "Un canal half duplex sau full duplex poate fi folosit pentru un protocol Stop and Wait. Protocolul Stop and Wait necesită ca receptorul să confirme primirea fiecărui pachet trimis de emitător, prin urmare, emițătorul și receptorul nu trebuie să trimită simultan."
+  },
+  "3": {
+    "question": "Care din urmatoarele metode NU este corecta pentru a determina inceputul si finalul unui cadru la nivelul legatura de date?",
+    "rights": [
+      "Inserarea de caractere de control in interiorul corpului cadrului pentru a escapa caracterele."
+    ],
+    "wrongs": [
+      "Caractere STX si ETX care incadreaza cadrul",
+      "Adaugarea in header a unui camp cu dimensiunea in bytes a cadrului"
+    ],
+    "feedback": "Caracterele STX si ETX sau adaugarea unui camp cu dimensiunea in bytes a cadrului sunt metode corecte pentru a determina inceputul si finalul unui cadru la nivelul legatura de date. Inserarea de caractere de control in interiorul corpului cadrului pentru a escapa caracterele nu este o metoda corecta, deoarece poate aparea o problema de ambiguitate atunci cand datele din corpul cadrului contin accidental aceleasi secvente de caractere ca cele folosite ca si caractere de control."
+  },
+  "4": {
+    "question": "Ce se foloseste pentru a marca un pachet IPv4 care nu se poate fragmenta?",
+    "rights": ["flag-ul DF"],
+    "wrongs": [
+      "campul offset",
+      "flag-ul MF",
+      "toate pachetele IPv4 se pot fragmenta"
+    ],
+    "feedback": "Pentru a marca un pachet IPv4 care nu se poate fragmenta se foloseste flag-ul DF (Don't Fragment). Acesta este setat in header-ul pachetului si indica faptul ca pachetul nu poate fi fragmentat pe parcursul tranzitarii retelei. In cazul in care o retea intermediara nu poate trimite pachetul fara sa-l fragmenteze, acesta va fi eliminat si va fi trimis un mesaj ICMP (Internet Control Message Protocol) de tipul 'Destination Unreachable - Fragmentation Needed and Don't Fragment Bit Set'."
+  },
+  "5": {
+    "question": "Pentru ce nu poate fi folosit protocolul ICMP?",
+    "rights": ["ARP"],
+    "wrongs": ["traceroute", "aflare path MTU", "ping"],
+    "feedback": "Protocolul ICMP (Internet Control Message Protocol) poate fi folosit pentru a efectua diverse operatiuni de diagnostice in retele, cum ar fi ping, traceroute sau aflare path MTU. Cu toate acestea, ICMP nu poate fi folosit pentru a rezolva adrese MAC in adrese IP, ceea ce inseamna ca nu poate fi folosit pentru ARP (Address Resolution Protocol). Pentru a rezolva adresele MAC, este nevoie de un protocol precum ARP sau NDP (Neighbor Discovery Protocol) pentru IPv6."
+  },
+  "6": {
+    "question": "Protocolul IP garanteaza primirea corecta a pachetelor la destinatie?",
+    "rights": ["Nu"],
+    "wrongs": ["Da"],
+    "feedback": "Protocolul IP (Internet Protocol) nu garanteaza primirea corecta a pachetelor la destinatie. Acesta este un protocol de livrare nesigur, ceea ce inseamna ca nu exista garantii ca un pachet va ajunge la destinatie, sau ca va ajunge in ordinea corecta. In schimb, IP se bazeaza pe alte protocoale, cum ar fi TCP sau UDP, pentru a oferi servicii de transport sigure, cu control de flux si erori de transmisie."
+  },
+  "7": {
+    "question": "Care din metodele de retransmisie pentru fereastra glisanta asigura faptul ca receiver-ul primeste cadrele corecte in ordine?",
+    "rights": ["Go Back n"],
+    "wrongs": ["Selective repeat", "Ambele variante"],
+    "feedback": "Metoda de retransmisie Go Back n asigura faptul ca receiver-ul primeste cadrele corecte in ordine. Aceasta metoda presupune ca receptorul confirma primirea pachetelor printr-un mesaj ACK (Acknowledgement), iar daca un pachet este pierdut sau corupt, toate pachetele ulterioare sunt ignorate. In schimb, metoda Selective Repeat permite retransmiterea unor pachete individuale care s-au pierdut sau au fost corupte, fara a afecta celelalte pachete, insa aceasta metoda nu garanteaza faptul ca pachetele vor fi receptionate in ordine."
+  },
+  "8": {
+    "question": "Ce se intampla in cadrul unui protocol cu fereastra glisanta cand sender-ul primeste un ACK pentru un cadru din fereastra sa?",
+    "rights": [
+      "Shifteaza fereastra si trimite urmatorul cadru doar daca este ACK pentru primul cadru din fereastra"
+    ],
+    "wrongs": [
+      "Asteapta si restul cadrelor ACK",
+      "Shifteaza fereastra si trimite urmatorul cadru doar daca este ACK pentru ultimul cadru din fereastra",
+      "Shifteaza fereastra si trimite urmatoarele cadre"
+    ],
+    "feedback": "Într-un protocol cu fereastra glisantă, sender-ul mută fereastra la dreapta și trimite următorul cadru numai dacă primește un ACK pentru primul cadru din fereastra."
+  },
+  "9": {
+    "question": "Ce fel de adrese se folosesc pentru protocolul Ethernet?",
+    "rights": ["adrese MAC"],
+    "wrongs": ["nu se folosesc adrese", "adrese IP"],
+    "feedback": "Protocolul Ethernet folosește adrese MAC pentru a identifica dispozitivele în rețea."
+  },
+  "10": {
+    "question": "Catre care next_hop se trimite un pachet daca sunt mai multe potriviri in tabela de rutare?",
+    "rights": ["longest prefix match"],
+    "wrongs": [
+      "shortest prefix match",
+      "first prefix match",
+      "no prefix match",
+      "all prefix match"
+    ],
+    "feedback": "Când există mai multe potriviri în tabela de rutare pentru adresa de destinație a unui pachet, se va folosi potrivirea cu cel mai lung prefix, cunoscută și sub numele de longest prefix match."
+  },
+  "11": {
+    "question": "Care nivel al stivei de protocoale ISO OSI se ocupa de corectia erorilor si controlul fluxului pe un canal de comunicatie?",
+    "rights": ["Nivelul legatura de date"],
+    "wrongs": ["Nivelul aplicatie", "Nivelul fizic", "Nivelul retea"],
+    "feedback": "Nivelul legătură de date (Layer 2) este responsabil pentru gestionarea transferului fiabil de date între două noduri adiacente pe o rețea de comunicații. Acest nivel se ocupă de corectarea erorilor și de controlul fluxului pe un canal de comunicare."
+  },
+  "12": {
+    "question": "Cum se realizeaza incapsularea pentru trimiterea unui pachet IPv4?",
+    "rights": ["pachetul IPv4 este in payload-ul cadrului Ethernet"],
+    "wrongs": [
+      "cadrul Ethernet este in interiorul pachetului IPv4",
+      "Nu au nici o legatura",
+      "Trebuie folosit un cadru PPPoE"
+    ],
+    "feedback": "Pentru a transmite un pachet IPv4 pe o rețea Ethernet, acesta trebuie încapsulat într-un cadrul Ethernet. În acest caz, pachetul IPv4 va fi pus în payload-ul cadrului Ethernet și se va adăuga un antet Ethernet care va conține adresele MAC ale dispozitivelor sursă și destinație."
+  },
+  "13": {
+    "question": "Cum se aplica masca de retea pentru verificarea intr-o tabela de rutare?",
+    "rights": ["AND"],
+    "wrongs": ["SUM", "OR", "XOR"],
+    "feedback": "Pentru a verifica dacă o adresă IP se află într-o anumită rețea, se aplică masca de rețea la adresa IP utilizând operația AND. Rezultatul va fi adresa de rețea corespunzătoare adresei IP date, care va fi căutată în tabela de rutare."
+  },
+  "14": {
+    "question": "In ce fel de algoritm de dirijare poate aparea problema numararii la infinit?",
+    "rights": ["Distance vector"],
+    "wrongs": ["Link state", "Nu este posibil a numararea la infinit"],
+    "feedback": "Problema numărării la infinit poate apărea în algoritmul de dirijare Distance Vector. În această situație, două sau mai multe rutere se trimit reciproc în circulăție informații despre costul rutei, fără a ajunge la o soluție de dirijare."
+  },
+  "15": {
+    "question": "Ce fel de zone pot exista in cadrul unui Autonomous system (AS)?",
+    "rights": ["o zona backbone si mai multe zone stub"],
+    "wrongs": [
+      "nu exista zone",
+      "toate zonele sunt la fel",
+      "o zona stub si mai multe zone backbone"
+    ],
+    "feedback": "În cadrul unui Autonomous System (AS) poate exista o zonă backbone și mai multe zone stub. Zona backbone este responsabilă pentru dirijarea traficului între zonele stub, iar zonele stub sunt conectate la zona backbone și nu dirijează traficul prin ele."
+  },
+  "16": {
+    "question": "Ce se intampla in cazul unui protocol de tip Stop and wait daca se pierde un mesaj de la sender la receiver?",
+    "rights": ["Sender-ul va retrimite ultimul mesaj dupa timeout"],
+    "wrongs": [
+      "Se blocheaza si transmisia este intrerupta",
+      "Receiver-ul trimite un NACK daca nu primeste urmatorul cadru"
+    ],
+    "feedback": "În cazul unui protocol de tip Stop and Wait, dacă un mesaj este pierdut, sender-ul va retrimite ultimul mesaj după ce a expirat timeout-ul."
+  },
+  "17": {
+    "question": "La nivelul retea, cum se poate asigura faptul că pachetele ajung la destinație în aceeași ordine în care au fost trimise?",
+    "rights": ["Circuite virtuale"],
+    "wrongs": ["Nu se poate garanta ordinea pachetelor", "Datagrame"],
+    "feedback": "Circuitele virtuale asigură că pachetele ajung la destinație în aceeași ordine în care au fost trimise, deoarece pachetele sunt transmise pe același traseu fix, într-o anumită ordine, și sunt numerotate în consecință. "
+  },
+  "18": {
+    "question": "Cum este împărțită o adresă IP în adresă de rețea și adresă de host?",
+    "rights": [
+      "Prefixul este adresa de rețea, sufixul este adresa pentru host"
+    ],
+    "wrongs": [
+      "Prefixul este adresa pentru host, sufixul este adresa de rețea",
+      "Nu există o împărțire"
+    ],
+    "feedback": "Prefixul adresei IP identifică adresa de rețea, în timp ce sufixul identifică adresa de gazdă. Adresa de rețea identifică o rețea, în timp ce adresa de gazdă identifică un dispozitiv specific din acea rețea. "
+  },
+  "19": {
+    "question": "Ce nu este posibil printr-un canal half-duplex?",
+    "rights": ["Transfer de date în ambele sensuri simultan"],
+    "wrongs": [
+      "Transfer de date în ambele sensuri",
+      "Orice fel de transfer de date",
+      "Corecția erorilor"
+    ],
+    "feedback": "Un canal half-duplex permite transferul de date în ambele sensuri, dar nu în același timp, deoarece transmisia este alternativă. Din acest motiv, transferul de date în ambele sensuri simultan nu este posibil prin canalul half-duplex. "
+  },
+  "20": {
+    "question": "Care din metodele de retransmisie pentru fereastra glisantă asigură faptul că se trimite un minim de cadre duplicate?",
+    "rights": ["Selective repeat"],
+    "wrongs": ["Ambele variante", "Go back n"],
+    "feedback": "Selective repeat este o metodă de retransmisie pentru fereastra glisantă care asigură faptul că se trimite un minim de cadre duplicate. Acest lucru este realizat prin faptul că receptorul reține pachetele primite corect, iar expeditorul retransmite doar pachetele care nu au fost confirmate. "
+  },
+  "21": {
+    "question": "Cine fragmentează pachetele în cadrul protocolului IPv6?",
+    "rights": ["Sursa datelor"],
+    "wrongs": [
+      "Router-ul care trebuie să transmită un pachet spre o rețea cu MTU prea mic",
+      "Router-ul care trebuie să transmită un pachet spre o rețea cu MTU prea mare",
+      "Destinația"
+    ],
+    "feedback": "În protocolul IPv6, fragmentarea pachetelor este realizată de către sursa datelor, nu de către routere, atunci când pachetul este prea mare pentru a fi transmis printr-un link cu MTU (Maximum Transmission Unit) mai mic decât dimensiunea pachetului."
+  },
+  "22": {
+    "question": "Care este valoarea bitului de paritate impară pentru șirul 1011101?",
+    "rights": ["0"],
+    "wrongs": ["1"],
+    "feedback": "Pentru a calcula bitul de paritate impară, se numără numărul de biți cu valoarea 1 din șirul de biți, apoi se adaugă un bit cu valoarea 0 sau 1 astfel încât numărul total de biți cu valoarea 1 să fie impar. În cazul acestui șir de biți, există 4 biți cu valoarea 1, deci bitul de paritate impară trebuie să fie 0, astfel încât numărul total de biți cu valoarea 1 să fie impar (5)."
+  },
+  "23": {
+    "question": "Dacă la nivelul legăturii de date se realizează transmisia transparentă prin caractere de control, ce se trimite dacă în câmpul de date apare caracterul DLE?",
+    "rights": ["DLE DLE"],
+    "wrongs": ["ETX", "DLE", "Nu se poate trimite"],
+    "feedback": "În transmisia transparentă prin caractere de control, anumite caractere (cum ar fi caracterul DLE - Data Link Escape) sunt considerate speciale și pot fi confundate cu caractere de control. Pentru a evita acest lucru, se folosește o tehnică numită 'byte stuffing', prin care caracterul special este înlocuit cu o secvență de caractere care nu poate fi confundată cu caractere de control. În cazul caracterului DLE, se trimite secvența DLE DLE în locul acestuia."
+  },
+  "24": {
+    "question": "De ce este necesara fragmentarea pachetelor IP?",
+    "rights": ["Dimensiunea pachetului este mai mare decat MTU"],
+    "wrongs": [
+      "Dimensiunea pachetului este mai egala cu MTU",
+      "Dimensiunea pachetului este mai mic decat MTU"
+    ],
+    "feedback": "Fragmentarea pachetelor IP este necesară atunci când dimensiunea pachetului este mai mare decât MTU-ul (Maximum Transmission Unit) al unei rețele intermediare prin care trebuie să treacă pachetul, astfel încât pachetul trebuie fragmentat în bucăți mai mici care pot fi transmise prin intermediul rețelei respective."
+  },
+  "25": {
+    "question": "In cadrul CIDR, ce semnificatie are notatia de forma 141.85.99.142/24 ?",
+    "rights": ["Adresa retelei are 24 biti si adresa host-ului are 8 biti"],
+    "wrongs": [
+      "Adresa este locala",
+      "Adresa retelei are 8 biti si adresa host-ului are 24 biti",
+      "/24 marcheaza numarul total de biti ai adresei IP."
+    ],
+    "feedback": "În notarea CIDR, numărul de biti din adresa de rețea este specificat prin /24, ceea ce înseamnă că primii 24 de biți ale adresei IP reprezintă adresa de rețea, iar ultimii 8 biți reprezintă adresa host-ului."
+  },
+  "26": {
+    "question": "Cine fragmenteaza pachetele in cadrul protocolului IPv4?",
+    "rights": [
+      "Router-ul care trebuie sa transmita un pachet spre o retea cu MTU prea mic"
+    ],
+    "wrongs": [
+      "Sursa datelor",
+      "Router-ul care trebuie sa transmita un pachet spre o retea cu MTU prea mare",
+      "Destinatia"
+    ],
+    "feedback": "În cadrul protocolului IPv4, pachetele sunt fragmentate de router-ul care trebuie să transmită un pachet spre o rețea cu MTU prea mic pentru dimensiunea pachetului IP respectiv. Astfel, router-ul va fragmenta pachetul în bucăți mai mici care să poată fi transmise prin rețeaua respectivă."
+  },
+  "27": {
+    "question": "Cum este marcat ultimul fragment dintr-un pachet?",
+    "rights": ["Flag-ul MF are valoarea 0"],
+    "wrongs": [
+      "Flag-ul MF are valoarea 1",
+      "Flag-ul DF are valoarea 1",
+      "Offset-ul are valoarea 0"
+    ],
+    "feedback": "Ultimul fragment dintr-un pachet este marcat prin faptul că flag-ul MF (More Fragments) are valoarea 0, indicând că nu mai sunt fragmente ulterioare."
+  },
+  "28": {
+    "question": "Ce reprezintă câmpul offset dintr-un fragment IP?",
+    "rights": ["Pozitia fragmentului in pachet ca grup de 8 bytes"],
+    "wrongs": [
+      "Pozitia fragmentului in pachet (numarul de bytes)",
+      "Nu are legatura cu fragmentarea",
+      "Pozitia fragmentului in pachet ca grup de 16 bytes"
+    ],
+    "feedback": "Câmpul offset dintr-un fragment IP indică poziția fragmentului în pachetul original, exprimată ca un număr de grupuri de 8 octeți (64 de biți)."
+  },
+  "29": {
+    "question": "În cadrul unui protocol cu fereastra glisantă, ce rol are cadrul de tip RR?",
+    "rights": ["Receive Ready"],
+    "wrongs": [
+      "Rank Reset",
+      "Response Resent",
+      "Reply Rejected",
+      "Reverse Run"
+    ],
+    "feedback": "Cadrul de tip RR (Receive Ready) este folosit într-un protocol cu fereastra glisantă pentru a confirma primirea cu succes a unui anumit număr de pachete. Acesta poate fi trimis de către receptor către emitător pentru a indica că poate primi mai multe pachete."
+  },
+  "30": {
+    "question": "Daca la nivelul legatura de date se realizeaza transmisia transparenta prin caractere de control, care este caracterul folosit pentru escapare?",
+    "rights": ["DLE"],
+    "wrongs": ["ETX", "STX", "IDK"],
+    "feedback": "DLE este caracterul folosit pentru escapare la nivelul legăturii de date în cazul transmisiei transparente prin caractere de control."
+  },
+  "31": {
+    "question": "Care nivel al stivei de protocoale ISO OSI se ocupa de determinarea rutei de la sursa la destinatie prin noduri intermediare?",
+    "rights": ["Nivelul retea"],
+    "wrongs": [
+      "Nivelul fizic",
+      "Nivelul legatura de date",
+      "Nivelul aplicatie"
+    ],
+    "feedback": "Nivelul rețea este cel care se ocupă de determinarea rutei de la sursă la destinație prin intermediul nodurilor, prin utilizarea de protocoale de rutare și adresare."
+  },
+  "32": {
+    "question": "Pe ce se bazeaza protocolul RIP?",
+    "rights": ["Distance vector"],
+    "wrongs": ["Link state", "Nici una din cele mentionate"],
+    "feedback": ""
+  },
+  "33": {
+    "question": "Cum se foloseste protocolul ICMP pentru a afla Path MTU?",
+    "rights": [
+      "Se trimit pachete ICMP din ce in ce mai mici pana cand nu se mai primeste o eroare"
+    ],
+    "wrongs": [
+      "Se trimit pachete ICMP din ce in ce mai mari pana cand se primeste o eroare",
+      "Path MTU nu are nici o legatura cu protocolul ICMP"
+    ],
+    "feedback": "Pentru a afla Path MTU, se trimit pachete ICMP cu flag-ul 'Don't Fragment' setat si cu o dimensiune tot mai mare. In cazul in care unul dintre pachete nu poate fi transmis din cauza dimensiunii prea mari, reteaua va returna un mesaj ICMP 'Fragmentation Needed and Don't Fragment was Set'. Acest mesaj va indica dimensiunea maxima a pachetelor care pot fi transmise pe acea ruta."
+  },
+  "34": {
+    "question": "Un protocol Stop and Wait are nevoie neaparat de un canal de transmisie Full Duplex?",
+    "rights": ["Nu. Este suficient un canal Half Duplex"],
+    "wrongs": ["Da", "Nu. Este suficient un canal Simplex"],
+    "feedback": ""
+  },
+  "35": {
+    "question": "Daca folosim un nr de secventa pe 4 biti, care este dimensiunea maxima a unei ferestre glisante pentru un transmitator?",
+    "rights": ["15"],
+    "wrongs": ["12", "16", "8"],
+    "feedback": "https://gateoverflow.in/111757/calculate-the-maximum-window-size"
+  },
+  "36": {
+    "question": "La nivelul legatura de date, pentru un protocol cu fereastra glisanta, cand se shifteaza fereastra transmitatorului?",
+    "rights": [
+      "Cand a primit ACK pentru primul cadru din fereastra de transmisie"
+    ],
+    "wrongs": [
+      "Dupa ce a terminat de trimis cadrele din fereastra",
+      "Cand a primit ACK pentru oricare cadru din fereastra de transmisie"
+    ],
+    "feedback": "Într-un protocol cu fereastra glisantă, transmiterea datelor se face prin transmiterea unui număr fix de cadre (fereastra de transmisie) înainte de așteptarea confirmării primirii acestora de către receptor. După ce primul cadru din fereastra de transmisie este trimis, transmitătorul așteaptă să primească un ACK (acuzație de primire) pentru acest cadru înainte de a deplasa fereastra de transmisie către următoarele cadre. În acest fel, transmitătorul poate asigura că receptorul a primit primul cadru și poate accepta noile cadre din fereastra de transmisie pentru transmitere. După primirea ACK-ului pentru primul cadru, fereastra de transmisie se deplasează cu un cadru și procesul se repetă până când toate cadrele din fereastra de transmisie au fost trimise și confirmate de receptor."
+  },
+  "37": {
+    "question": "Cand se reasambleaza fragmentele unui pachet IP?",
+    "rights": ["La destinatia finala"],
+    "wrongs": [
+      "La intrarea in prima retea cu un MTU suficient de mare",
+      "Dupa traversarea unui numar fix de retele"
+    ],
+    "feedback": ""
+  },
+  "38": {
+    "question": "Ce garanteaza transmisia datelor folosind datagrame?",
+    "rights": ["Nici una din aceste variante"],
+    "wrongs": [
+      "Ordinea pachetelor ajunse la destinatie este aceeasi ordine in care au fost transmise",
+      "Canal de comunicatie prin care datele sigur ajung la destinatie",
+      "Corectitudinea datelor trimise"
+    ],
+    "feedback": ""
+  },
+  "39": {
+    "question": "Intre metodele de retransmisie 'Go back N' si 'Selective repeat' care are nevoie sa pastreze intr-un buffer cadrele primite corect la receptor, pana se primesc si cadrele retransmise.",
+    "rights": ["Selective repeat"],
+    "wrongs": ["Nici unul", "Amandoua", "Go back N"],
+    "feedback": ""
+  },
+  "40": {
+    "question": "Cum influenteaza fragmentarea pachetelor daca este setat flagul DF din header-ul IPv4?",
+    "rights": ["Pachetul nu se va fragmenta niciodata"],
+    "wrongs": [
+      "Pachetul trebuie neaparat sa fie fragmentat",
+      "Nu are legatura cu fragmentarea"
+    ],
+    "feedback": ""
+  },
+  "41": {
+    "question": "Ce se intampla la protocolul Ethernet daca 2 host-uri incearca sa trimita in acelasi timp?",
+    "rights": [
+      "Are loc o coliziune si host-urile vor incerca sa retrimita dupa un timp"
+    ],
+    "wrongs": [
+      "Datele ajung corect la destinatie.",
+      "Se trimite un NACK pentru unul din transmitatori."
+    ],
+    "feedback": ""
+  },
+  "42": {
+    "question": "La nivelul legatura de date, daca vrem sa trimitem un payload de 16 biti, de cati biti de control avem nevoie pentru metoda Hamming?",
+    "rights": ["5"],
+    "wrongs": ["3", "4", "6"],
+    "feedback": "Pentru a utiliza metoda Hamming pentru a trimite un payload de 16 biți, avem nevoie de 5 biți de control. Aceasta se datorează faptului că metoda Hamming utilizează o matrice de control cu 5 linii și 16 coloane pentru a verifica și a corecta erorile de transmisie. Deci, răspunsul corect este 5."
+  },
+  "43": {
+    "question": "Prin folosirea unui checksum este posibila:",
+    "rights": ["Detectia erorilor de transmisie"],
+    "wrongs": [
+      "Fixarea lungimii maxime a unui cadru.",
+      "Detectia si corectarea erorilor de transmisie"
+    ],
+    "feedback": "Checksum este o metodă utilizată pentru detectarea erorilor de transmisie în cadrul unui set de date. Se calculează o sumă de control (checksum) pentru datele transmise și se compară cu o sumă de control primită de la receptor. Dacă cele două sunt diferite, se poate presupune că au apărut erori de transmisie în datele transmise. Nu este posibilă detectarea și corectarea erorilor de transmisie utilizând doar checksum. Pentru a corecta erorile de transmisie, este necesară utilizarea altor metode, cum ar fi codurile de corecție a erorilor. De asemenea, checksum nu fixează lungimea maximă a unui cadru."
+  }
+}
+
+        function insertFilterButtons(chunkSize) {
+            let questionsNumber = Object.keys(RIGHTS).length;
+
+            let rowDiv = document.createElement("div")
+            rowDiv.classList.add('row', "filterDiv");
+
+            for (let i = 0; i < questionsNumber; i += chunkSize) {
+                let intervalButton = document.createElement("button");
+                intervalButton.classList.add("btn", "btn-light","col-4","mr-1", "filterButton");
+                intervalButton.setAttribute("start", i);
+                intervalButton.setAttribute("end", i + chunkSize < questionsNumber ? i + chunkSize : questionsNumber);
+
+                intervalButton.textContent = (i + 1).toString() + "-" + (i + chunkSize < questionsNumber ? i + chunkSize : questionsNumber).toString()
+                rowDiv.appendChild(intervalButton);
+            }
+            document.body.appendChild(rowDiv);
+        }
+        insertFilterButtons(Math.ceil(Object.keys(RIGHTS).length / 6));
+
+
+        /* Returns an array of strings */
+        function getShuffledQuestionKeys(idxStart, idxEnd) {
+            let questionsKeys = Object.keys(RIGHTS);
+            if (idxStart !== undefined && idxEnd != undefined)
+                questionsKeys = questionsKeys.slice(idxStart, idxEnd);
+            return questionsKeys.sort((a, b) => 0.5 - Math.random());
+        }
+
+        /* Returns an array of strings */
+        function getShuffledOptions(options) {
+            return options
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value)
+        }
+
+        function insertQuestions(idxStart, idxEnd){
+            let quizzesMain = document.createElement('main')
+            let questionNumber = 0;
+            getShuffledQuestionKeys(idxStart, idxEnd).forEach(questionID => {
+                RIGHTS[questionID].rightids = [];
+                RIGHTS[questionID].wrongids = [];
+
+                let quizDiv = document.createElement('div')
+                quizDiv.classList.add('quizDiv', "d-grid", "gap-1");
+                quizDiv.setAttribute('data-id', questionID);
+
+                let questionParagraph = document.createElement('p');
+                questionParagraph.classList.add("question");
+                questionParagraph.innerHTML = `${++questionNumber}. ${RIGHTS[questionID].question.replace(/(?:\r\n|\r|\n)/g, '<br>')}`;
+                quizDiv.appendChild(questionParagraph);
+
+                let optionID = 0;
+                let allOptions = RIGHTS[questionID].rights;
+                allOptions = allOptions.concat(RIGHTS[questionID].wrongs)
+                getShuffledOptions(allOptions).forEach(optionText => {
+                    optionButton = document.createElement('button');
+                    optionButton.classList.add("optionButton", "btn", "btn-light");
+                    optionButton.innerHTML = optionText;
+
+                    if (RIGHTS[questionID].rights.includes(optionText))
+                        RIGHTS[questionID].rightids.push(optionID.toString());
+                    else if (RIGHTS[questionID].wrongs.includes(optionText))
+                        RIGHTS[questionID].wrongids.push(optionID.toString());
+                    optionButton.setAttribute('data-id', optionID++)
+                    quizDiv.appendChild(optionButton);
+                });
+
+                quizzesMain.appendChild(quizDiv);
+            });
+            document.body.appendChild(quizzesMain);
+        }
+        insertQuestions();
+
+
+
+
+
+
+        const onClick = (event) => {
+        const element = event.target;
+        const elementID = element.getAttribute('data-id');
+        const elementParent = element.parentNode;
+        const elementParentID = elementParent.getAttribute('data-id');
+        const isFilterButton = element.classList.contains("filterButton");
+        const isOptionButton = element.classList.contains("optionButton");
+        const isQuestion = element.classList.contains('question');
+        const isOptionButtonParentAnswered = elementParent.hasAttribute('question-already-answered');
+        
+        if (isQuestion) {
+            elementParent.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest"
+            });
+            navigator.clipboard.writeText(element.innerText.split(". ").slice(1).join(". "));
+        }
+
+        if (isFilterButton) {
+            let main = document.querySelector('main'); 
+            main.parentNode.removeChild(main);
+            insertQuestions(parseInt(element.getAttribute('start')), parseInt(element.getAttribute('end')));
+            return;
+        } 
+        if (isOptionButton) {
+            if (isOptionButtonParentAnswered) return;
+
+            element.setAttribute('chosen', "");
+            const selectedOptionButtons = elementParent.querySelectorAll("button[chosen]").length;
+            const numberOfRightAnswers = RIGHTS[elementParentID].rightids.length;
+            if (selectedOptionButtons === numberOfRightAnswers) {
+            elementParent.setAttribute('question-already-answered', "");
+            elementParent.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest"
+            });
+
+            let rightsGiven = 0;
+            elementParent.querySelectorAll("button").forEach(option => {
+                option.classList.add("pointerNone");
+                const isRight = RIGHTS[elementParentID].rightids.includes(option.getAttribute('data-id'));
+
+                if (option.hasAttribute('chosen')) {
+                    option.classList.remove("btn-light");
+                    if (isRight) {
+                        rightsGiven++;
+                        option.classList.add("btn-success");
+                    } else {
+                        option.classList.add("btn-danger");
+                    }
+                } else if (isRight) {
+                    option.classList.remove("btn-light");
+                    option.classList.add("btn-success", "makeOpaque");
+                }
+                  else
+                    option.classList.add("btn-white");
+            });
+
+            let percentageRight = (100 * rightsGiven) / numberOfRightAnswers;
+            let percentageWrong = 100 - percentageRight;
+            const progressBar = `
+                <section class="progress" style="height: 80%; margin-top: 3px; opacity: 0.9">
+                <section class="progress-bar" style="width: 1%; background: white"></section>
+                <section class="progress-bar-striped bg-success" style="width: ${percentageRight * 0.99}%; text-align: center; color: white">${rightsGiven}</section>
+                <section class="progress-bar-striped bg-danger" style="width: ${percentageWrong * 0.99}%; text-align: center; color: white">${numberOfRightAnswers - rightsGiven}</section>
+                <section class="progress-bar" style="width: 1%; background: white"></section>
+                </section>`;
+
+            elementParent.innerHTML += progressBar;
+            if (RIGHTS[elementParentID].feedback != "")
+                elementParent.innerHTML += `<p class="explanation">${RIGHTS[elementParentID].feedback}</p>`
+            }
+        }
+        }
+        window.addEventListener('click', onClick);
+    }
+
+    
+
+    </script>
+
+</body>
+</html>
+</html>

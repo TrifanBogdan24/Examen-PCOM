@@ -1,0 +1,23 @@
+Explicati de ce este sigur schimbul de chei Diffie-Hellman? Nu se poate intercepta cheia de criptare?
+Ce are nevoie sa faca un atacator pentru a compromite acest schimb de mesaje?
+
+A. Pentru protocolul ESP din IPSec, cum se asigura autentificarea datelor? (0.2p)
+B. De ce nu este criptat si header-ul IP? Este o problema de confidentialitate in cazul
+acesta? (0.3p)
+
+A. Care este diferenta intre un algoritm de criptare simetric si unul asimetric? (0.3p)
+B. Cum se realizeaza o semnatura digitala folosind chei de criptare asimetrica? (0.2p)
+
+Explicati cum poate un client sa ceara unui server FTP sa transmita un fisier catre alt
+server FTP. Are vreo influenta modul pasiv?
+
+Explicati mecanismul de fragmentare. Ce este și ce rol are MTU?(0.1p)
+(b)Dacă un pachet de 1800 de octeti trece printr-o rețea cu MTU=532 explicati câte
+fragmente se creeaza și care este dimensiunea fiecaruia. (0.2p)
+(c)Cum funcționează offset-ul pentru fiecare fragment? (0.2p)
+
+Protocolul HTTP: tipuri de caching; cine controleaza replicarea paginilor in cache? (0.3p)
+Descrieti una din solutiile folosite pentru pastrarea consistentei cache-urilor. (0.2p)
+
+Cum se realizeaza autentificarea si protejarea datelor prin SSL? Dati ca exemplu un browser
+care acceseaza un website prin https

@@ -1773,4 +1773,265 @@ ce foloseste Slow Start si algortmul AIMD de evitare a congestiei.
 
 ## Lab 9. Protocolul `HTTP`
 > Link lab: https://pcom.pages.upb.ro/labs/lab9/lecture.html
-TODO
+
+De parcurs inainte de laborator:
+- [The HyperText Transfer Protocol](https://beta.computer-networking.info/syllabus/default/protocols/http.html)
+- [Seria de articole de la echipa Chrome - Inside look at modern web browser](https://developer.chrome.com/blog/inside-browser-part1/)
+
+
+
+### Protocolul `HTTP`
+Miliarde de imaginie JPEG, pagini HTML, fisiere text, filme in format MPEG,
+fisiere audio WAV, applet-uri Java si multe altele sunt accesate pe internet in fiecare zi.
+
+`HTTP` este protocolul responsabil cu mutarea acestora rapid,
+convenabil si fiabil de la serverele web din intrega lume la browserele web al utilizatorilor.
+
+Deorce `HTTP` este **un protocol peste TCP**, datele transmise nu vor fi deteriorate
+sau amestecate sau pierdute in timpul transmisiei de date.
+
+`HTTP` (**HyperText Transfer Protocol**) este un `protocol de nivel 7`
+din stiva `OSI` (**aplicatie**) folosit pentru transferul informatiilor in Internet.
+
+Este un protocol care opereaza peste date de tip ASCII.
+
+La baza protocolului HTTP stau concepte de **cerere** si **raspuns**.
+In cazul comunicatiei HTTP, o entiatate inainteaza o cerere si cealalta trebuie,
+obligatoriu, sa ofere un raspuns.
+
+![HTTP REQUEST & RESPONSE](https://pcom.pages.upb.ro/labs/lab9/images/http1.png)
+
+Probobil ca utilizati clienti HTTP in fiecare zi.
+Cel mai comun client este un browser web (de ex: Google Chrome, Mozilla, Safari etc)
+
+Browserele web sunt entitatile care solicita artefacte `HTTP` de la servere si le afiseaza pe ecran.
+
+> `HTTP` functioneaza implicit pe **portul 80**
+
+> Versiunea securzata de HTTP, HTTPS, functioneaza implicit pe **portul 443**
+
+Un server, insa, poate fi configurat sa asculte cereri HTTP pe orice port disponibil.
+
+
+
+### Cereri `HTTP`
+Cu totii suntem familiari cu acest format:
+![URL HTTP](https://pcom.pages.upb.ro/labs/lab9/images/cerere_general_1.png)
+
+Exemplul de mai sus cuprinde:
+- versiunea protocolului
+- host-ul interlocutorului
+- calea de pe serverul interlocutorului unde se va desfasura actiunea
+- parametri aditionali de cerere (optionali)
+
+
+> `URL` = Uniform Resource Locator
+
+> Caracterul `?` dintr-un `URL` separa calea de parametrii de interogare
+>
+> Tot ce se afla dupa `?` sunt considerati parametrii de integore.
+> Acestia sunt scrisi sub forma de `cheie=valoare` si sunt separati prin `&`
+
+```
+https://www.example.com/path?param1=value1&param2=value2&param3=value3
+```
+
+
+Ce este prezentat in poza nu este o cererere `HTTP`,
+ci preambul unei cereri `HTTP`.
+De fapt, in momentul in care se da enter, browserul (sau orice alt client)
+creaza, bazat pe informatiile oferite, cererea HTTP efectiva.
+
+
+Formatul cererii este urmatorul:
+```
+METODA CALE VERSIUNE_PROTOCOL\r\n
+Host: HOST\r\n
+Header1: Valoare Header1\r\n
+Header2: Valoare Header2\r\n
+...
+Cookie: cheie1=valoare1; cheie2=valoare2; ...; cheieN=valoareN\r\n
+\r\n
+DATA
+```
+
+
+**Linia de start** contien 3 elemente:
+Primul element este metoda folosita.
+Metodele `HTTP` sunt verbe ce descriu actiunea ce va fi efectuata
+asupra entitatii catre care se transmite cererea.
+
+Cele mai des utilizate cereri sunt:
+- `GET` = interogare de resurse
+- `POST` = aduagare de resurse. De obicei are si date atasate.
+- `PUT` = modificare de resurse. De obicei are si date atasate.
+- `DELETE` = stergere de resurse
+
+
+Al doilea element este reprezentat de **calea** si **parametrii de cerere**
+(daca exista), unde se va actiona asupra resursei, pe server.
+
+In cazul in care exista **parametri de cerere**, acestia trebuie separati prin `?`.
+
+Al trilea element este reprezentat de versiunea protocollui de HTTP folosita.
+Implicit, din motive de securitate, este folosit `HTTPS`.
+
+Pentru variatna ne-securizata, ultima versiune este `HTTP/1.1`.
+
+**A doua linie** descrie host-ul entitatii unde va fi trimisa cererea.
+Host-ul poate sa fie atat un `IP` cat si un `domeniu`.
+
+
+### Cookies
+**Cookies** sunt scrise inlantuit, delimitat de punct si virgula (mai putin ultima).
+Implicit, comunicarea HTTP este considerata stateless.
+Nu se poate face corelatie intre oricare doua cereri succesive.
+
+> `Cookies` retin bucati de informatie trimise de la server la client
+> pt a putea fi folosite in **cereri ulterioare**.
+
+
+> NOTA:
+> `Cookies` sunt artefacte care se salveaza doar la **Client**
+
+> Inaintea datelor (sau la finalul cererii, daca nu exista date) se pune intotdeauna `\r\n`
+
+
+
+**Data** variaza in functie de tipul de data transmis.
+Cele mai des intalnite tipuri de date transmise sunt:
+
+- `text/html` = De exemplu, pagini HTML
+
+- `application/x-www-form-urlencoded` = Date de forma *key1=value1&key2=value2&...&keyN=valueN*. Datele sunt inlantuite prin `&`
+
+- `aplication/json` = Date de forma JSON (Javascript Object Notation). Folosite des in interactiunea cu API-uri
+
+- `multipart/from-data` = Data binare, de exemplu, fisiere
+
+
+Pe baza informatiilor prezentate mai sus, o varianta **simplificata**
+a cererii catre Facebook din exemplu, ar arata asa:
+```
+GET /search/top/?q=programare%20%web%202020 HTTPS\r\n
+Host: facebook.com\r\n
+User-Agent: Mozilla/5.0\r\n
+Connection: keep-alive\r\n
+Cookie: c_user=XXXXXXXXXX; presence=XXXXXXX\r\n
+\r\n
+
+```
+
+Exemplu foarte simplu de `POST`:
+```
+POST /test HTTP/1.1
+Host: foo.example
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 27
+
+field1=value1&field2=value2
+```
+
+
+> NOTA
+>
+> Este obligatoriu sa punem `\r\n` la finalul fiecarui rand din cerere
+> cu exceptia datelor atasate
+
+Un exemplu de implementare a unei cererei `HTTP` de tip `GET` pe baza codului:
+```c
+message = compute_get_request(SERVERADDR, "/api/v1/dummy", NULL, NULL, 0);
+send_to_server(sockfd, message);
+response = receive_from_server(sockfd);
+printf("%s\n", response);
+```
+
+
+
+### Raspunsuri `HTTP`
+Orice cerere `HTTP` este urmata de un raspuns.
+Raspunsurile seamana cu cererile din punct de vedere al organizarii.
+Formatul este urmatorul:
+```
+PROTOCOL_VERSION STATUS_CODE STATUS_TEXT\r\n
+Header1: Valoare Header1\r\n
+Header2: Valoare Header2\r\n
+...
+HeaderN: Valoare HeaderN\r\n
+Set-Cookie: cheie1=valoare1\r\n 
+Set-Cookie: cheie2=valoare2\r\n
+...
+Set-Cookie: cheieN=valoareN\r\n
+\r\n
+DATA
+```
+
+
+**Linia de start** contine 3 elemente.
+
+Primul element este repreentat de versiunea protocolului de `HTTP`
+folosit pentru a raspunde.
+
+Al doilea element este reprezentat de **statusul** raspunsului.
+Statusul este corelat de reusita, respectiv esecul cererii si de ce s-a intamplat
+pe entiatea catre care s-a trimis cererea.
+
+Exemplu de statusuri des intalnite:
+- 200 - OK
+- 201 - Created
+- 204 - No Content
+- 400 - Bad Request
+- 401 - Unauthorized
+- 403 - Forbidden
+- 404 - Resource Not Found
+- 500 - Internal Server Error
+
+
+[Un ghid vizual pentru a vă aminti semnificația codurilor.](https://http.cat/)
+
+
+Conform [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
+1. Informational responses (100 – 199)
+2. Successful responses (200 – 299)
+3. Redirection messages (300 – 399)
+4. Client error responses (400 – 499)
+5. Server error responses (500 – 599)
+
+
+Al treilea element descrie textul care insoteste statusul.
+
+`Headerele` urmeaza aceeasi structura si descriu acelasi lucru ca si in cazul cererilor.
+
+`Cookies` sunt setate cata una pe linie.
+In afara de **cheie=valoare**, acestea mai au o serie de atribute atasate,
+precum **secure**, **httpOnly**, **domain**.
+
+`Data` urmeaza aceeasi structura ca si in cazul cererilor.
+
+
+
+
+### Sesiune si autentificare
+O sesiune este definita ca o serie de solicitari legate de browser
+care provin de la acelasi client intr-o anumita perioada de timp.
+
+Urmarirea sesiunii leaga impreuna o serie de solicitari de browser.
+Ganditiv-va la aceste solicitari ca pagini care pot avea o anumita semnificatie.
+In ansambulu, cum ar fi o aplicatie pentru cosul de cumparaturi.
+
+Autentificarea de baza HTTP este o metoda simpla de autentificare pt client
+prin care acesta furnizeaza un nume de utilizator si o parola atunci cand se
+efectueaza o solicitarea catre server.
+
+Aceste este cel mia simplu mod posibil de a impune controlul accesului,
+deoarce nu neceista module cookies, sesiuni sau orice altceva.
+
+Pentru a utiliza acest lucru, clientul trebuie sa trimita antetul de
+autorizare impreuna cu fiecare solicitare pe care o face.
+
+
+Implementarea mecanismului de autentificare implica construirea unui
+mesaj de tip `POST` care include cei doi parametrii **nume** si **parola**
+sub forma unui vectori de stringuri.
+
+

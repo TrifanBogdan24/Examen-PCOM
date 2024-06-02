@@ -774,7 +774,11 @@ routerele se vor ocupa de transmisie.
 - `IP`
 
 
-### Ethernet
+### `Ethernet`
+> `Ethernet` = protocol de nivel 2 (**DataLink** din **OSI**)
+>
+> Responsabil pt transferul de date intre dispozitive din aceeasi retea locala (`LAN` = Local Area Network)
+
 `Ethernet` este echivelntul protocolului de **DataLink**
 pe care l-am implementat in primele laboratoare.
 
@@ -811,7 +815,10 @@ struct  ether_header {
 
 
 
-### IPv4
+### `IPv4`
+> Protcol de nivel 3 (**retea**) din modelul **TCP/IP**
+
+
 Protocolul `IP` este utilizat pentru a permite dispozitivelor conectate in retele
 diferite sa schimbe informatii prin intermediul unui dispozitiv intermediar numit router.
 Hedaer-ul unui pachet (**pachet**) `IP` este urmatorul:
@@ -1772,7 +1779,7 @@ ce foloseste Slow Start si algortmul AIMD de evitare a congestiei.
 
 
 ## Lab 9. Protocolul `HTTP`
-> Link lab: https://pcom.pages.upb.ro/labs/lab9/lecture.html
+> [lab 9](https://pcom.pages.upb.ro/labs/lab9/lecture.html)
 
 De parcurs inainte de laborator:
 - [The HyperText Transfer Protocol](https://beta.computer-networking.info/syllabus/default/protocols/http.html)
@@ -2047,3 +2054,268 @@ sub forma unui vectori de stringuri.
 | `TRACE`   | Transmite in ecou cererea care a sosit                     |
 | `OPTIONS` | Interoagarea anumitor optiuni                              |
 | `CONNECT` | Folosit pt conectare prin proxy sever pe conexiune tunel   |
+
+
+
+## Lab 10. `Email` and `DNS`
+> Link lab: https://pcom.pages.upb.ro/labs/lab10/lectura.html
+
+De citit inainte de laborator:
+- https://textbooks.cs.ksu.edu/cis527/3-core-networking-services/14-email-protocols/
+-https://textbooks.cs.ksu.edu/cis527/3-core-networking-services/11-dns/
+- https://youtu.be/0F1JP78JAPE
+- https://www.youtube.com/watch?v=nyH0nYhMW9M
+- https://www.researchgate.net/profile/Hander-Mohammed/publication/315302873_A_Survey_of_Email_Service_Attacks_Security_Methods_and_Protocols/links/61305233c69a4e487972f98a/A-Survey-of-Email-Service-Attacks-Security-Methods-and-Protocols.pdf
+- https://arxiv.org/pdf/1805.08426
+
+
+### `Email`
+`SMTP` = Simple Mail Transfer Protocol (**Application Layer**)
+  - `POP` = Post Office Protocol
+  - `IMAP` = Internet Message Access Protocol
+
+`SMTP` servers have databases with the user's email addresses,
+linked to the `DNS` (abs@domain.com)
+
+> The `DNS` (Domain Name System) links domain names to IP addresses.
+
+> Via the `DNS` it cat get the `IP` address of the domain 'gmail.com'
+
+
+
+- `POP` does not keep the server and client in sync.
+When you download your mail, it is deleted from the server
+so the server is not furher updated.
+
+- `IMAP` keeps the tow synced - you only download a copy. It is only deleted from the server when you manually delete it
+
+
+Email Server Components:
+- Mail Transfer Agent (`MTA`)
+- Mail Delivery Agent (`MDA`)
+- `IMAP`/`POP`/Webmail Server
+
+
+
+### `DNS` (Domain Name Server)
+It begun in 1985 with a file `hosts.txt`
+- Hosted by `SRI` (Stanford Research Institute)
+- Maps System Names to IP Addreses
+- Updated Manually
+- Difficult to Avoid Collisions
+- Mantain Consistency Across Systems
+
+
+Then, they introduce `DNS`.
+
+
+With the hierarchicla desing of the domain name space,
+it may take a few steps to determine the appropriate IP address
+for a given domain name.
+
+
+For example, if you want to find the IP address of the domain
+www.wikipedia.org, you might start by querryng the root
+nameserver for the location of the **.org** nameserver.
+
+Then, the **.org** nameserver could tell you where
+the **wkipedia.org** nameserver is.
+
+Then, when you ask the **wikipedia.org** nameserver where
+**www.wikipedia.org** is located, it will be able to tell you
+that it is the authoritative name server for that domain.
+
+In practice, ofthen there is **caching** `DNS` servers
+hosted by you SIP that store previously requested domain names.
+
+So you won't have to talk directl with the root nameserver.
+
+This helps reduce the overall load across the root servers
+and amkes many queries much faster.
+
+
+The most commonly used `DNS` server today is `BIND`:
+- Widely Used `DNS` Server
+- Latest: `BIND 9`
+- Implements ALL IETF DNS Standards
+
+
+`DNS Record Types`
+- `SOA` = Start of Authority
+- `A` = IPv4 Adress
+- `AAAA` = IPv6 Address
+- `CNAME` = Cannical Name (Alias)
+- `MX` = Mail Exchange
+- `NS` = Name Server
+- `PTR` = Pointer (Reverse Lookup)
+- `TXT` = Text
+
+
+### Obiective
+In urma parcurgerii acestui laborator, studentul va fi capabil sa:
+- diferentieze si utilizeze doua protocoale pentru citirea postei electronice
+- foloseasca protocolul pt trimiterea de mesaje si atasamente prin posta electronica
+- scrie un client simplu de e-mail
+- opereze cu ierarhia spatiilor de nume si sa identifice tipurile de domenii si subdomenii
+- foloseasca algoritmul de interogare utilizat de DNS
+- identifice tipurile de resurese pt divese domenii si clasele acestora
+- foloseasa un set minimal de functii pt aflarea informatiilor unui sistem gazada
+
+
+
+### Protocolul `DNS`
+`DNS` foloseste in general protocolul `UDP` pe portul `53`,
+dar, in cazul raspunsurilor de dimensiuni mai mari sau pt
+toperatii ca transferul de zone, se utilizeaza si `TCP`.
+
+Mai recent, s-a introdus si `DNS` over `HTTPS`
+(sau `DoH`, descris in RFC 8484) care presupune realizarea de 
+cereri DNS peste HTTPS din motive de securitate.
+
+
+
+
+### Spatiul de nume
+`DNS` organizeaza numele resurselor intr-o ierarhie de domenii.
+Un domeniu reprezinta o colectie de sisteme gazada care au unele
+prooprietati in comun, cum ar fi faptul ca toate apartin unei
+acelaiasi organizatii sau faptul ca toate sunt situate geografic in acelasi perimetru.
+
+
+
+![Domain Naming Hierarchy](https://pcom.pages.upb.ro/labs/lab10/dns/images/dns.gif)
+
+Fiecare domeniu este partiționat în subdomenii și acestea sunt la rândul lor, 
+partiționate, ș.a.m.d. Toate aceste domenii pot fi reprezentate ca un arbore, după 
+cum se poate vedea mai sus. Frunzele arborelui reprezintă domenii care nu au 
+subdomenii, dar care conțin totuși sisteme. Un domeniu frunză poate conține de la un 
+singur sistem gazdă până la mii de sisteme gazdă.
+
+Domeniile de pe primul nivel se împart în două categorii: generice (gTLD-uri) și de 
+țări (ccTLD-uri). Domeniile generice inițiale erau com (comercial), edu (instituții 
+educaționale), gov (guvernul SUA), int (organizații internaționale), mil (forțele 
+armate ale SUA) și org (organizații nonprofit). În ziua de astăzi, restricțiile 
+legate de astfel de domenii sunt mult mai mici, existând astfel peste 1200 de 
+domenii top-level generice. Domeniile de țări includ o intrare pentru fiecare țară, 
+după cum se definește în ISO 3166. Fiecare domeniu este denumit de calea în arbore 
+până la rădăcină. Componentele sunt separate prin punct. Astfel, departamentul de 
+Calculatoare de la UPB poate fi cs.pub.ro în loc de numele în stil UNIX /ro/pub/cs.
+
+Numele de domenii pot fi absolute sau relative. Un nume absolut de domeniu (FQDN - 
+fully qualified domain name) este un nume de domeniu care nu permite nici o 
+ambiguitate cu privire la locația relativă la rădăcina arborelui de nume de domenii. 
+Astfel de nume absolute de domenii se termină cu punct (de exemplu cs.pub.ro.). În 
+contrast, un nume relativ de domeniu este un nume care are sens numai relativ la un 
+anume domeniu DNS (altul decât cel rădăcină).
+
+Numele de domenii nu fac distincție între litere mici și litere mari, edu sau EDU 
+însemnând practic același lucru. Componentele numelor pot avea o lungime de cel mult 64 de caractere, iar întreaga cale de nume nu trebuie să depășească 255 de caractere.
+
+Fiecare domeniu controlează cum sunt alocate domeniile de sub el. De exemplu, 
+Japonia are domeniile ac.jp și co.jp echivalente cu edu și com. Olanda nu face nicio distincție și pune toate organizațiile direct sub nl. Pentru a crea un nou domeniu, 
+se cere permisiunea domeniului în care va fi inclus. De exemplu, dacă un grup PCom 
+de la CS dorește să fie cunoscut ca pcom.cs.pub.ro, acesta are nevoie de permisiunea 
+celui care administrează cs.pub.ro. Similar, o nouă universitate care dorește 
+obținerea unui domeniu va trebui să ceară permisiunea administratorului domeniului \
+edu. În acest mod, sunt evitate conflictele de nume și fiecare domeniu poate ține 
+evidența tuturor subdomeniilor sale. Odată ce un nou domeniu a fost creat și 
+înregistrat, el poate crea subdomenii, fără a cere permisiune de la cineva din 
+partea superioară a arborelui.
+
+
+
+### Algoritmul de interogare
+Conceptele cu care `DNS` lucreaza sunt:
+- `Servere DNS` = Statii care ruleaza programe de tip server de `DNS` ce contin informatii asupra bazelor de date `DNS` si despre structura numelor de domenii
+
+- `Resolvere DNS` = Programe care folosesc cereri `DNS` pt interogarea unor servere `DNS`
+
+Modul in care se deruleaza procesul de interogare `DNS` este cel din figura de mai jos:
+![Cum functioneaza DNS](https://pcom.pages.upb.ro/labs/lab10/dns/images/understanding-dns-queries-and-lookups.jpg)
+
+
+
+### Inregistrari de resurse
+Fiecarui domeniu, fie ca este un singur calculator gazda,
+fie un domeniu de nivel superiro, ii poata fi asociata o multime de inregistrari
+de resurse (**resourse records** sau `RR`-uri).
+Pentur un singur sistem gazda, cea mai obisnuita **inregistrare de resursa**
+este chiar adresa `IP`, dar exista multe alte tipuri.
+
+Atunci cand procedura resolver trimite un nume de domeniu `DNS`,
+ceea ce va primi ca raspuns sunt inregistrarile de resurse asociate acelui nume.
+Astfel, adevarata functie a `DNS` este sa realizeze corespondenta dintre
+numele de domenii si inregistrari de resurse.
+
+O **inregisrare** de resursa este un **5-tuplu**.
+Cu toata ce, din ratiuni de eficienta, inregistrarile de resurse sunt
+codificate binar, in majoritatea expunerilor ele sunt prezentate ca text ASCII,
+cate o inregistrare de resurse pe linie.
+
+Formatul utilizat este `<Nume_domeniu, Timp_de_viață, Tip, Clasă, Valoare>`
+- `Câmpul Nume_domeniu` precizează domeniul căruia i se aplică această înregistrare. În mod normal, există mai multe înregistrări pentru fiecare domeniu, și fiecare copie a bazei de date păstrează informații despre mai multe domenii. Acest câmp este utilizat cu rol de cheie de căutare primară pentru a satisface cererile. Ordinea înregistrărilor în baza de date nu este semnificativă. Când se face o interogare despre un domeniu, sunt returnate toate înregistrările care se potrivesc cu clasa cerută.
+- `Câmpul Timp_de_viață` dă o indicație despre cât de stabilă este înregistrarea.
+- `Câmpul Tip` precizează tipul înregistrării. Cele mai importante tipuri sunt prezentate în tabelul de mai jos.
+
+
+TODO: continua
+
+
+
+
+
+
+# Ohers
+
+## `RIP` (Routing Information Protocol)
+> Link: https://youtu.be/8jKNrWgFtUA
+
+Este un protocol de **vector de distante**, bazat pe matricea cu numărul de **hop**-uri.
+
+Când un router trimite un pachet de date către un segment de rețea,
+aceste se contorizează ca un singur **hop**.
+
+`RIP` suportă un număr maxim de 15 **hop**-uri contorizate,
+ceea ce înseamnă că în rețea putem avea cel mult 16 routere.
+
+
+
+Dacă dorim să trimitem date între două noduri, se va alege calea cu cel mai mic număr de hop-uri.
+
+> Un fel de `Dijkstra`
+> doar că alege drumul cu cele mai puține noduri
+> nu cu viteza de transmitere cea mai mare
+
+Dacă există mai multe astfel de drumuri, routerul va trimite pachete pe fiecare dintre ele,
+simultan.
+
+
+
+**Dezavantaje** ale `RIP`
+- Este bazat doar pe matricea numărului de hop-uri. Așadar, dacă există o rută mai bună disponibilă cu o lățime de bandă mai mare, `RIP` nu va alege acea rută particulară.
+
+- `RIP` este un protocol de rutare clasică și nu suportă `VLSM` (Varaible Lenght Subnet Mask)
+> `VLSM` = Variable Length Subnet Mask
+
+- Transmite actualizările către întreaga rețea și creează pur și simplu o mulțime de trafic
+- Utilizarea lățimii de bandă este foarte mare deoarece transmite actualizările sale la fiecare 30 de secunde
+- `RIP` suportă maxim 15 hop-uri (0-15), înseamnă că maxim `16` routere pot fi configurate în `RIP`, nu mai mult de atât
+- Convergența lentă (înseamnă că, atunci când orice legătură este în jos, ar trebui să aleagă rapid o rută alternativă, dar în `RIP` durează mult timp)
+- Distanța administrativă este de 120 (`Valoarea AD`). Cu cât este mai mică `Valoarea AD`, cu atât este mai fiabil, dar `RIP` are cea mai mare `Valoare AD` și nu este la fel de fiabil ca alte protocoale de rutare.
+
+
+
+Cum își actualizează `RIP` **tabelul de rutare**?
+> cronometru de actualizare = 30 sec
+- toate routerele configurate cu `RIP` își trimit actualizările la fiecare 30 de secunde
+
+> cronometru invalid = 180 sec
+- Dacă oricare dintre routere este deconectat de la rețea, routerul vecin așteaptă 180 de secunde pentru a auzi actualizarea. Dacă nu primește nicio actualizare, va marca acea rută ca neaccesibilă
+
+> cronometru de eliminare = 240 sec
+- Dacă routerul nu se ridică sau nu trimite actualizarea până la 240 de secunde = 4 min, routerul vecin va elimina complet acea rută particulară din tabelul său de rutare, ceea ce este un proces foarte lent
+
+**Avantaje** ale `RIP`:
+- este ușor de configurat
+- nu există complexitate
+- Utilizare redusă a CPU-ului

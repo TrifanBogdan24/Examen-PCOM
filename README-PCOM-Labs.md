@@ -1495,6 +1495,8 @@ windows_size = [BDP / DatagramSize] = [50000 / 1500] = 30
 
 
 ## Lab 6. Retransmisie peste `UDP`. `Go-Back-N ARQ`
+> Link: https://pcom.pages.upb.ro/labs/lab6/go_back_n.html
+
 In laboratorul precedent am dezvolatat un protocol simplu cu fereastra glisanta
 peste un link ideal.
 Totusi, in realitate, **link-urile au pierderi**.
@@ -1516,7 +1518,8 @@ Transmitatorul retransmite toate cele **N** segmentele din fereastra la declansa
 
 
 
-
+> Protocolul `Go-Back-N ARQ` este un protocol de tip `duplex`
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
 
 
 ## Lab 7. Protocolul `TCP`. Multiplexare IO.

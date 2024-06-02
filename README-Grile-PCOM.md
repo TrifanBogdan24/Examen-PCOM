@@ -227,6 +227,10 @@ Acesta este un `protocol de livrare nesigur`, ceea ce inseamna ca nu exista gara
 * `Nu. Este suficient un canal Half Duplex`
 
 
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
+
+
+
 ##  La nivelul legatura de date, pentru un protocol cu `fereastra glisanta`, cand se `shifteaza fereastra` transmitatorului?
 * `Cand a primit ACK pentru primul cadru din fereastra de transmisie`
 
@@ -368,6 +372,10 @@ Pentru a verifica dacă o adresă IP se află într-o anumită rețea, se aplic�
 Un canal half duplex sau full duplex poate fi folosit pentru un protocol Stop and Wait. Protocolul Stop and Wait necesită ca receptorul să confirme primirea fiecărui pachet trimis de emitător, prin urmare, emițătorul și receptorul nu trebuie să trimită simultan.
 
 
+
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
+
+
 ##  În cadrul unui protocol cu `fereastra glisantă`, ce rol are cadrul de tip `RR`?
 * `Receive Ready`
 
@@ -385,6 +393,8 @@ Cadrul de tip RR (Receive Ready) este folosit într-un protocol cu fereastra gli
 * `transfer de date in ambele sensuri simultan`
 
 Un canal half-duplex permite transferul de date în ambele sensuri, dar nu în același timp, deoarece transmisia este alternativă. Din acest motiv, transferul de date în ambele sensuri simultan nu este posibil prin canalul half-duplex.
+
+![simplex vs haf-duplex vs duplex](https://datasave.qsfptek.com/resources/image/2021-12-30931497.jpg!webp)
 
 
 ## Cum este împărțită o adresă `IP` în adresă de `rețea` și adresă de `host`?

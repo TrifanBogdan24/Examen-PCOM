@@ -2035,3 +2035,15 @@ mesaj de tip `POST` care include cei doi parametrii **nume** si **parola**
 sub forma unui vectori de stringuri.
 
 
+
+### Metode `HTTP`
+| Metoda    | Descriere                                                  |
+| --------- | ---------------------------------------------------------- |
+| `GET`     | Cerearea de citire a unei pagini Web                       |
+| `HEAD`    | Cerere de citire a antetului unei pagini de Web            |
+| `POST`    | Adaugarea la resursa specificata (de exemplu o pagina Web) |
+| `PUT`     | Cerere de ememorare a unei pagini de Web                   |
+| `DELETE`  | Stergerea unei pagini Web                                  |
+| `TRACE`   | Transmite in ecou cererea care a sosit                     |
+| `OPTIONS` | Interoagarea anumitor optiuni                              |
+| `CONNECT` | Folosit pt conectare prin proxy sever pe conexiune tunel   |

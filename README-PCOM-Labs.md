@@ -182,7 +182,6 @@ xiii
 - `PPP` = Point to Point Protocol
 - `PPPoE` = Point to Point Protocol over Etherne
 - `MPLS` = Multi Protocol Label Switching
-- `VPN` = Virtual Private Network
 
 - `IP` = Internet Protocol
   * `CIDR` = Classes Inter Domain Routing
@@ -190,16 +189,16 @@ xiii
   * `DF` = Don't Fragment
   * `MF` = More Fragments
   * `ARP` = Address Resolution Protocol
-
-- `NAT` = Netwrok Address Tranlation
-- `ICMP` = Internet Control Message Protocol
-- `PING` = Packet Internet or Inter-Network Groper
-- `RIP` = Routing Infomration Protocol
-- `TTL` = Time to live (of a packet)
-- `LSP` = Link State Packet
-- `BGP` = Border Geteway Protocol
-- `AS` = Autonomous Systems
-- `OSPF` = Open Shortes Path First
+  * `NAT` = Netwrok Address Tranlation
+  * `ICMP` = Internet Control Message Protocol
+  * `PING` = Packet Internet or Inter-Network Groper
+  * `RIP` = Routing Infomration Protocol
+  * `TTL` = Time to live (of a packet)
+  * `LSP` = Link State Packet
+  * `BGP` = Border Geteway Protocol
+  * `AS` = Autonomous Systems
+  * `OSPF` = Open Shortes Path First
+  * `VPN` = Virtual Private Network
 
 - `UDP` = User Datagram Protocol
 - `TCP` = Transmission Control Protocol
@@ -2363,13 +2362,17 @@ Receptie:
 
 Este un protocol de **vector de distante**, bazat pe matricea cu numărul de **hop**-uri.
 
+
+> `RIP` este un protocol de rutare, de nivel 3 (**retea**) din stiva `OSI`
+
 Când un router trimite un pachet de date către un segment de rețea,
 aceste se contorizează ca un singur **hop**.
 
 `RIP` suportă un număr maxim de 15 **hop**-uri contorizate,
 ceea ce înseamnă că în rețea putem avea cel mult 16 routere.
 
-
+> Retelele mai mari de **16 rutere** ar necesitate **protocoale de rutare**
+> mai complexe, precum `OSPF` (Open Shortes Path First) sau `BGP` (Border Gateway Protocol)
 
 Dacă dorim să trimitem date între două noduri, se va alege calea cu cel mai mic număr de hop-uri.
 
@@ -2412,5 +2415,106 @@ Cum își actualizează `RIP` **tabelul de rutare**?
 - Utilizare redusă a CPU-ului
 
 
-## `NAT` (Network Address Translater)
 
+## Starea legaturii (`link state`)
+Presupunem ca fiecare nod paote gasi `lagaturile cu vecinii`
+si `costul` fiecarei legaturi.
+
+Informatiile sunt diseminate prin inundarea celorlalte noduri:
+- `LSP` (Link State Packet) transmise prin inundare (`flooding`)
+- Pachetul contine
+  1. id-ul nodului care creaza pachetul
+  2. lista nodurilor conectate cu costul fiecarei legaturi
+  3. un numar de secventa
+  4. durata de viata a pachetului, `TTL` (Time to Live), un numar intreg
+
+
+## `OSPF` (Open Shortest Path First)
+> `OSPF` este un protocol de rutare, de nivel 3 (retea)
+
+Masajele `OSPF` permit schimbul de informatii intre noduri
+Sunt transmise in pachete `IP` cu `89` ca numar de protocol.
+
+- `Hello`
+  * stabileste si pastreaza legatura cu vecinni
+  * descopera nodurile/ruterele cu care este conectat direct
+
+- `Link State request`
+  * cerere stare legatura
+  * cere informatii despre anumite legaturi de la un alt router
+
+- `Link State update`
+  * actualizare stare legatura
+  * trimite informatii despre legaturi, ca raspuns la o cerere
+
+- `Link State ack`
+  * confirmare stare legatura
+  * confirma primirea unui mesaj de actualizare
+
+- `Database description`
+  * trimite `LSSB` (Link State Database)
+  * mesajele contin fino despre `AS` (Autonomous Systems) din zona
+
+
+Caclul rute:
+- Nivel 1 (zona `stub`)
+  * Folosind **inundarea**, fiecare router informeaza celelalte rouetere din zona despre legaturile sale si costurile acestore
+  * Fiecare router (inclusiv cele de granita zonala) din zona calculeaza separata caile cele mai scurte catre ruterele din aceasi zona
+  * In final, **routerul ge granita zonala** va cunoaste caile cele mai scurte catre oricare retea
+
+- Nivel 2 (`AS` = Autonomous Systems): Celea unui pachet intre 2 zone diferite
+  * de la nodul sursa la `zona backbone`
+  * traverseaza `backbone`
+  * de la `backbone` la reteaua destinatie
+
+
+
+
+
+## `BGP` (Border Gateway Protocol)
+> `BGP` este un protocol de rutare, de nivel 3 (retea)
+
+
+- Retea = nodurile reprezinta `AS`-uri, rutarea se face doar inter-domain
+
+- Protocol = `vectorul distantelor`
+
+- Tabele de dirijare contine si rutele spre destinatie.
+
+- Cuminica vecinilor caile utilizare efectiv (evita problema numararii la infinit)
+
+
+Tipuri de mesaje folosite de `BGP` (Border Gateway Protocol):
+- `Open` = mesaj care intiaza sesiunea `BGP` si negocieaza optiunile posibile
+- `Notification` = mesaj folosit pt a incehie o sesiune `BGP`, de obicei datorita unei erori. Router-ul se va inchide imediat dupa transmiterea / primirea unui astfle de masaj
+- `Update` = mesaj pentru trimitrerea de rute noi sau modificari ale rutelor existente
+- `Keepdive` = mesaj pt a confirma daca vecinii unui router sunt functionali. Daca un router **trimite un mesaj** `update` timp de 30 de sucunde, atunci va trimite un mesaj `keepdive`. Daca nu se primeste de la un router niciun fel de mesaj timp de `30 de sec`, reouterul respectiv se va considere defect/inchis si toate rutele prin el vor fi retrare
+
+
+
+## `FTP` (File Transfer Protocol)
+> `FTP` ocupa nivelul 7 din stiva `OSI` (**aplicatie**)
+
+- Ca **protocol de aplicatie**, `FTP` gestioneaza sesiune si comenzi de transfer de fisiere
+
+- Uilizatorii pot initia conexiune `FTP` pentru a transfera fisiere folosind divere **aplicatii client** `FTP`
+
+- `FTP` necesita autentificare printr-un nume de utilizator si o parola
+
+- Exista si varianta de acces anonim, unde utilizatorii pot accesa serverul fara autentificare personalizata
+
+- Modele de transfer: `FTP` functioneaza in doua moduri principale:
+  1. `Mod activ` = **clientul deschide un port** si asteapta ca serverul sa initieze conexiune
+  2. `Mod pasiv` = **serverul deschide un port** si astepata ca clientul sa initieze conexiunea
+
+- `FTP` utilizeaza doua canale separate
+  * unul pentru control (`comenzi`): foloseste **portul TCP 21**
+  * altul pentru `transferul datelor`: foloseste **portul TCP 20**
+
+
+- `FTP` in forma sa de baza nu este criptat, ceea ce inseamna ca datele,
+**inclusiv acreditarile** sunt transferate in text clar.
+
+- Pentru a asigura securitate transferului de fisiere, se pot utiliza variante precum:
+  * `FTPS` (FTP Secude) care utilizeaza `SSL/TSL` pt criptate
+  * `SFTP` (SSH File Transfer Protocol) care ruleaza sub protocolul SSH
